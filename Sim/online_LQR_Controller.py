@@ -79,7 +79,7 @@ class Controller2D(object):
         self._current_vY=self._vehicle.get_velocity().y
         self._frame+=1
         
-        return self._current_x, -self._current_y, self._current_vX, -self._current_vY
+        return [self._current_x, -self._current_y, self._current_vX, -self._current_vY]
 
     def dlqr(self,A,B,Q,R):
         '''

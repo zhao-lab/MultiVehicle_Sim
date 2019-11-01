@@ -14,7 +14,7 @@ from util import Util
 from frame import Frame
 import copy
 
-def GP_sim(vehicle_states, patternN=132, steps=100):
+def GP_sim(vehicle_States, patternN=132, steps=100):
     """
     Function to communicate between GP and Carla.
     """   
@@ -22,7 +22,7 @@ def GP_sim(vehicle_states, patternN=132, steps=100):
     u = Util()
 
     with open(u.mix_model_path, "rb") as mix_np:  # load saved mixture model
-    mix_model = pickle.load(mix_np)
+        mix_model = pickle.load(mix_np)
 
     # with open("data_sample/frames_Uber_od2sq_oneway", "rb") as frame_np: # load saved frames
     #     frames = pickle.load(frame_np)
@@ -40,7 +40,7 @@ def GP_sim(vehicle_states, patternN=132, steps=100):
     # frameTest = frames[frameTest_idx]
     # frameTest = Frame(np.array([-311.15]),np.array([5.54]),np.array([0]),np.array([0])) # Defining custom test frame
     # print(frameTest.x)
-    frameTest=vehicle_states
+    frameTest=Frame(vehicle_States[:,0], vehicle_States[:,1], vehicle_States[:,2],vehicle_States[:,3])
 
 
     bk =  mix_model.b[pattern_num]
@@ -70,7 +70,7 @@ def GP_sim(vehicle_states, patternN=132, steps=100):
     vehicles['x']=frameTest.x.reshape(-1,1)
     vehicles['y']=frameTest.y.reshape(-1,1)
     vehicles['vx']=frameTest.vx.reshape(-1,1)
-    vehicles['vy']=frameTest.vy/reshape(-1,1)
+    vehicles['vy']=frameTest.vy.reshape(-1,1)
 
     # print('Simulating pattern {}'.format(pattern_num))
 
@@ -112,6 +112,6 @@ def GP_sim(vehicle_states, patternN=132, steps=100):
     #     frames2file(frames_sim, filename)
 
 
-simulate_traj(mix_model, pattern_num, frameTest, steps=300,bAnimate=0,bDataOut=1)
+# simulate_traj(mix_model, pattern_num, frameTest, steps=300,bAnimate=0,bDataOut=1)
 
-print('Visualization Finished') 
+# print('Visualization Finished') 

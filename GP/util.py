@@ -138,8 +138,8 @@ class Util(object):
 
             self.delT_data = 0.1
 
-            self.frames_path = "/home/gauss/Carla_096/TRI_MultiVehicle_Sim/GP/data_sample/frames_Carla04_T1"
-            self.mix_model_path = "/home/gauss/Carla_096/TRI_MultiVehicle_Sim/GP/data_sample/Carla04_T1_final_DPGP"
+            self.frames_path = "/home/gauss/Carla_096/TRI_MultiVehicle_Sim/GP/data_sample/frames_Carla04_T3"
+            self.mix_model_path = "/home/gauss/Carla_096/TRI_MultiVehicle_Sim/GP/data_sample/Carla04_T3_final_DPGP"
 
     def draw_w(self):
         # randomly draw wx and wy from gamma distribution

@@ -42,8 +42,8 @@ import json
 import sys
 sys.path.insert(0,'../GP/')
 sys.path.insert(1,'../GP/data_sample')
-import pattern_vis
-
+# import pattern_vis
+import GP_mp
 
 # -------importing the LQR Controller-------------
 from online_LQR_Controller import *
@@ -93,7 +93,9 @@ class controller2():
         # spawn_points=self.map.get_spawn_points()    #   Querying spawnpoints
         waypoints=self.map.generate_waypoints(5.0)   # Generating waypoints at a resolution of 5m
     
-        hanger1=[[-261,-40],[-280,-40],[-280,-24],[-261,-24]]
+        # hanger1=[[-261,-40],[-280,-40],[-280,-24],[-261,-24]]
+        hanger1=[[-301,2.1],[-290,2.1],[-290,18.1],[-301,18.1]]
+
         self.spawn_points=[]
         waypoints=self.map.generate_waypoints(7.0)
         for i,w in enumerate(waypoints):
@@ -114,7 +116,7 @@ class controller2():
 
     def spawn_hangar2(self):
         """
-        Function to read and store the spawn points and respective reference trajectories
+        Function to read and store the spawn poinllts and respective reference trajectories
         from .json files
         """
         file_name="Data/Carla_Town04_T2_Pattern110_FrameEdge_sim_traj.json"
@@ -261,7 +263,7 @@ class controller2():
         if self.running==1.0:
             return
         # -----------------------------------
-        # self.num_vehicles=1
+        self.num_vehicles=2
         self.actor_spawn()
 
         # m_patterns=["Carla_Town04_T1_Pattern3_Frame33_sim_traj.json","Carla_Town04_T3_Pattern132_Frame133_sim_traj.json","Carla_Town04_T2_Pattern110_Frame11_sim_traj.json"]
@@ -312,8 +314,8 @@ class controller2():
                 self.world.apply_settings(settings)
             # Generating waypoints
             self.waypts=client.get_world().get_map().generate_waypoints(1.0)
-            # self.spawn_hangar()
-            self.spawn_hangar2()
+            self.spawn_hangar()
+            # self.spawn_hangar2()
 
             while True:
                 # self.world.tick()
@@ -325,9 +327,21 @@ class controller2():
                     #----------- LQR Control------------------------------
                     try:
                         batch=[]
+                        # Appending current states of all the actors in scene into Frame data-structure
                         for i, car in enumerate(self.controllers.keys()):
-                            x,y,vx,vy=self.controllers[car].update_values()
-                            traj,traj_V=self.GP(i, car, x, y)
+                            curr_state=self.controllers[car].update_values()
+                            if(i==0):
+                                vehicle_state=np.array(curr_state).reshape(1,-1)
+                            else:
+                                vehicle_state=np.vstack((vehicle_state,np.array(curr_state).reshape(1,-1)))
+                        
+                        GP_ref=GP_mp.GP_sim(vehicle_state, 57, 120)
+                        
+                        # Computing control commands for each vehicle and appending to batch list
+                        for i,car in enumerate(self.controllers.keys()):  
+                            traj=np.hstack((GP_ref['x'][i,:].reshape(-1,1),GP_ref['y'][i,:].reshape(-1,1)))
+                            traj_V=np.hstack((GP_ref['vx'][i,:].reshape(-1,1),GP_ref['vy'][i,:].reshape(-1,1)))
+
                             batch.append(self.controllers[car].update_controls(traj,traj_V))
 
                         client.apply_batch_sync([carla.command.ApplyVehicleControl(batch[x][0],batch[x][1]) for x in range(len(batch))])
