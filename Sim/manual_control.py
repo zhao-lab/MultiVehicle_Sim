@@ -218,7 +218,7 @@ class World(object):
         self.hud.tick(self, clock)
 
     def render(self, display):
-        print(carla.Vehicle.get_transform(self.player))
+        # print(carla.Vehicle.get_transform(self.player))
         self.camera_manager.render(display)
         self.hud.render(display)
 
@@ -807,7 +807,7 @@ def game_loop(args):
 
         np.save('Parking1.npy',spn_pts)
 
-        # data_recorder=data_query.dataQ(hud)
+        data_recorder=data_query.dataQ(hud)
         settings=client.get_world().get_settings()
         settings._synchronous_mode=True
         client.get_world().apply_settings(settings)
@@ -816,9 +816,9 @@ def game_loop(args):
         while True:
             clock.tick_busy_loop(60)
             # -----Data Query ----------------------------
-            # wrld_snp=client.get_world().wait_for_tick()
-            # actor_list=client.get_world().get_actors()
-            # data_recorder.data_input(actor_list,wrld_snp.frame)
+            wrld_snp=client.get_world().wait_for_tick()
+            actor_list=client.get_world().get_actors()
+            data_recorder.data_input(actor_list,wrld_snp.frame)
 
             if controller.parse_events(client, world, clock):
                 return
@@ -834,7 +834,7 @@ def game_loop(args):
         if world is not None:
             world.destroy()
         
-        # data_recorder.data_save()
+        data_recorder.data_save()
 
         pygame.quit()
 

@@ -14,7 +14,7 @@ from util import Util
 from frame import Frame
 import copy
 
-def GP_sim(vehicle_States, patternN=132, steps=100):
+def GP_sim(vehicle_States, patternN=132, steps=300):
     """
     Function to communicate between GP and Carla.
     """   
@@ -36,7 +36,7 @@ def GP_sim(vehicle_States, patternN=132, steps=100):
     # print('Number of data frames in pattern {}: {}'.format(pattern_num, len(pattern_idx)))
     # frameTest_idx = np.random.choice(pattern_idx)
     # frameTest_idx = 23
-    print('Simulating pattern {} with Frame {}'.format(pattern_num, frameTest_idx))
+    # print('Simulating pattern {} with Frame {}'.format(pattern_num, frameTest_idx))
     # frameTest = frames[frameTest_idx]
     # frameTest = Frame(np.array([-311.15]),np.array([5.54]),np.array([0]),np.array([0])) # Defining custom test frame
     # print(frameTest.x)
@@ -55,9 +55,7 @@ def GP_sim(vehicle_States, patternN=132, steps=100):
         np.savetxt(filename, traj_data, delimiter=',')
 
 
-    # steps=100, 
-    bAnimate=1 
-    bDataOut=0
+
 
     #-------Simulating and Rolling out Trajectories---------------------------
 

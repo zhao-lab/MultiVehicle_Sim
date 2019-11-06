@@ -9,7 +9,7 @@ class dataQ():
 
 	def __init__(self,hud):
 		############File_argumensts####################################
-		self.date='NGSim'
+		self.date='NGSim_ROI1'
 		self.test='LB'                      # indication of the experiment number
 		self.data_dir='../../Data_Record/'    #File directory
 

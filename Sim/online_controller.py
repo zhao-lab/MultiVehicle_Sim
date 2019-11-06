@@ -38,6 +38,7 @@ import time
 import argparse
 import random
 import json
+import matplotlib.pyplot as plt
 
 import sys
 sys.path.insert(0,'../GP/')
@@ -94,8 +95,8 @@ class controller2():
         waypoints=self.map.generate_waypoints(5.0)   # Generating waypoints at a resolution of 5m
     
         # hanger1=[[-261,-40],[-280,-40],[-280,-24],[-261,-24]]
-        hanger1=[[-301,2.1],[-290,2.1],[-290,18.1],[-301,18.1]]
-
+        hanger1=[[-301,-2.1],[-280,-2.1],[-280,-18.1],[-301,-18.1]]
+        # hanger1=[[-301,-40],[-301,16],[-321,16],[-321,-40]]  
         self.spawn_points=[]
         waypoints=self.map.generate_waypoints(7.0)
         for i,w in enumerate(waypoints):
@@ -109,8 +110,8 @@ class controller2():
                 spawn_point=w.transform
                 spawn_point.location.z=2
                 self.spawn_points.append(spawn_point)
-                
-        # print('Number of spawn points in the hanger: {}',len(self.spawn_points))
+        
+        print('Number of spawn points in the hanger: ',len(self.spawn_points))
         # np.save('waypoints.npy',wpts)
 
 
@@ -263,7 +264,7 @@ class controller2():
         if self.running==1.0:
             return
         # -----------------------------------
-        self.num_vehicles=2
+        self.num_vehicles=1
         self.actor_spawn()
 
         # m_patterns=["Carla_Town04_T1_Pattern3_Frame33_sim_traj.json","Carla_Town04_T3_Pattern132_Frame133_sim_traj.json","Carla_Town04_T2_Pattern110_Frame11_sim_traj.json"]
@@ -277,7 +278,6 @@ class controller2():
         #     else:
         #         self.num_vehicles=len(self.refA.keys())   # number of vehicles  
         #     self.actor_spawn()
-
         self.running=1.0
     
     def destroy_Car(self, car_id):
@@ -316,7 +316,6 @@ class controller2():
             self.waypts=client.get_world().get_map().generate_waypoints(1.0)
             self.spawn_hangar()
             # self.spawn_hangar2()
-
             while True:
                 # self.world.tick()
                 # ts=self.world.wait_for_tick()
@@ -335,7 +334,7 @@ class controller2():
                             else:
                                 vehicle_state=np.vstack((vehicle_state,np.array(curr_state).reshape(1,-1)))
                         
-                        GP_ref=GP_mp.GP_sim(vehicle_state, 57, 120)
+                        GP_ref=GP_mp.GP_sim(vehicle_state, 57, 500)
                         
                         # Computing control commands for each vehicle and appending to batch list
                         for i,car in enumerate(self.controllers.keys()):  

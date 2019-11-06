@@ -33,7 +33,7 @@ class Controller2D(object):
         self._desired_vY      = 0
         # self._current_frame      = 0
         # self._current_timestamp  = 0
-        self._start_control_loop = True
+        self._start_control_loop = False
         self._set_throttle       = 0
         self._set_brake          = 0
         self._set_steer          = 0
@@ -243,11 +243,11 @@ class Controller2D(object):
             return(vehicle.id,self._controller)
         else:
             self.GPstrt=1
+            self._start_control_loop=True
             # print('Entered ROI.................................................')
 
         # Skip the first frame to store previous values properly
         if self._start_control_loop:
-            
    
             if self._frame>0:
 
