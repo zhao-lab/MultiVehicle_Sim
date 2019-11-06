@@ -58,7 +58,7 @@ class controller2():
         self.running=0
         self.num_vehicles=0
         self.m_pat=0
-        self.ROI=[[-438,-40],[-438,16],[-301,16],[-301,-40]]    # Defining the Region of Interest
+        self.ROI=[[-428,-40],[-428,16],[-301,16],[-301,-40]]    # Defining the Region of Interest
 
     def _render(self,world):
         '''
@@ -264,7 +264,7 @@ class controller2():
         if self.running==1.0:
             return
         # -----------------------------------
-        self.num_vehicles=1
+        self.num_vehicles=3
         self.actor_spawn()
 
         # m_patterns=["Carla_Town04_T1_Pattern3_Frame33_sim_traj.json","Carla_Town04_T3_Pattern132_Frame133_sim_traj.json","Carla_Town04_T2_Pattern110_Frame11_sim_traj.json"]
@@ -334,12 +334,12 @@ class controller2():
                             else:
                                 vehicle_state=np.vstack((vehicle_state,np.array(curr_state).reshape(1,-1)))
                         
-                        GP_ref=GP_mp.GP_sim(vehicle_state, 57, 500)
+                        GP_ref=GP_mp.GP_sim(vehicle_state, 57, 50)
                         
                         # Computing control commands for each vehicle and appending to batch list
                         for i,car in enumerate(self.controllers.keys()):  
-                            traj=np.hstack((GP_ref['x'][i,:].reshape(-1,1),GP_ref['y'][i,:].reshape(-1,1)))
-                            traj_V=np.hstack((GP_ref['vx'][i,:].reshape(-1,1),GP_ref['vy'][i,:].reshape(-1,1)))
+                            traj=np.hstack((GP_ref['x'][i,:].reshape(-1,1),-GP_ref['y'][i,:].reshape(-1,1)))
+                            traj_V=np.hstack((GP_ref['vx'][i,:].reshape(-1,1),-GP_ref['vy'][i,:].reshape(-1,1)))
 
                             batch.append(self.controllers[car].update_controls(traj,traj_V))
 

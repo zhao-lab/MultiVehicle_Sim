@@ -192,7 +192,7 @@ class Controller2D(object):
                 return True
         return False
 
-    def update_controls(self, ref, ref_v):
+    def update_controls(self, ref=[0,0], ref_v=[0,0]):
         # self.update_values()
         self.v_desired=ref_v
         self._waypoints=np.hstack((ref[:,0].reshape(-1,1),-ref[:,1].reshape(-1,1)))
@@ -205,10 +205,23 @@ class Controller2D(object):
         last_y=self._last_y
         last_yaw=self._last_yaw
         vehicle=self._vehicle
-        
+
         # --Changing LHS to RHS
         yaw=-yaw
         y=-y
+
+        if(self.GPstrt==0 and not(self.inROI([x,y]))):
+            self._controller.throttle=1.0
+            self._controller.steer=0
+            self._controller.brake=0
+            return(vehicle.id,self._controller)
+            
+        else:
+    
+            self.GPstrt=1
+            self._start_control_loop=True
+            # print('Entered ROI.................................................')
+        
         # -------------------
         vX= self._current_vX
         vY=-self._current_vY
@@ -236,15 +249,7 @@ class Controller2D(object):
         brake_output    = 0
         min_idx=0
 
-        if(self.GPstrt==0 and not(self.inROI([x,y]))):
-            self._controller.throttle=1.0
-            self._controller.steer=0
-            self._controller.brake=0
-            return(vehicle.id,self._controller)
-        else:
-            self.GPstrt=1
-            self._start_control_loop=True
-            # print('Entered ROI.................................................')
+
 
         # Skip the first frame to store previous values properly
         if self._start_control_loop:
@@ -280,6 +285,7 @@ class Controller2D(object):
                 
                 #  computing the closest reference waypoint index and distance to it
                 min_dist,min_idx=self.find_nearest_points(x,y,waypoints)
+                
                 #  Computiong the look ahead index 
                 if min_idx<(len(waypoints)-self._look_ahead):
                     idx_fwd=self._look_ahead
@@ -316,7 +322,7 @@ class Controller2D(object):
 
                 V_n=abs(self.v_desired[min_idx,1]*np.sin(yaw)+self.v_desired[min_idx,0]*np.cos(yaw))  # using the reference velocity from closest index of desired velocity
                 # V_n=max(V_n,1)
-                # print(V_n)
+                # print('desired velocity',V_n)
                 # vy=self.v_desired[min_idx,1]*np.cos(yaw)-self.v_desired[min_idx,0]*np.sin(yaw)
                 
                 # -----Bang Bang Longitudanal Control------------
