@@ -95,8 +95,8 @@ class controller2():
         waypoints=self.map.generate_waypoints(5.0)   # Generating waypoints at a resolution of 5m
     
         # hanger1=[[-261,-40],[-280,-40],[-280,-24],[-261,-24]]
-        hanger1=[[-301,-2.1],[-280,-2.1],[-280,-18.1],[-301,-18.1]]
-        # hanger1=[[-301,-40],[-301,16],[-321,16],[-321,-40]]  
+        # hanger1=[[-301,-2.1],[-280,-2.1],[-280,-18.1],[-301,-18.1]]
+        hanger1=[[-321,-2.1],[-311,-2.1],[-311,-18.1],[-321,-18.1]]
         self.spawn_points=[]
         waypoints=self.map.generate_waypoints(7.0)
         for i,w in enumerate(waypoints):
@@ -264,7 +264,7 @@ class controller2():
         if self.running==1.0:
             return
         # -----------------------------------
-        self.num_vehicles=3
+        self.num_vehicles=4
         self.actor_spawn()
 
         # m_patterns=["Carla_Town04_T1_Pattern3_Frame33_sim_traj.json","Carla_Town04_T3_Pattern132_Frame133_sim_traj.json","Carla_Town04_T2_Pattern110_Frame11_sim_traj.json"]
@@ -320,7 +320,6 @@ class controller2():
                 # self.world.tick()
                 # ts=self.world.wait_for_tick()
                 try:
-
                     if self.running==0:
                         self.run_pattern()                     
                     #----------- LQR Control------------------------------
@@ -334,7 +333,7 @@ class controller2():
                             else:
                                 vehicle_state=np.vstack((vehicle_state,np.array(curr_state).reshape(1,-1)))
                         
-                        GP_ref=GP_mp.GP_sim(vehicle_state, 57, 50)
+                        GP_ref=GP_mp.GP_sim(vehicle_state, 132, 50)
                         
                         # Computing control commands for each vehicle and appending to batch list
                         for i,car in enumerate(self.controllers.keys()):  

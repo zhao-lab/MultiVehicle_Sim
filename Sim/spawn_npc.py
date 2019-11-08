@@ -173,7 +173,7 @@ def main():
                 spawnNow=False
 
             vehicles_list=world.get_actors().filter('vehicle.*')
-            if(len(vehicles_list)<=1):
+            if(len(vehicles_list)<=0):
                 spawnNow=True
 
             for car in vehicles_list:

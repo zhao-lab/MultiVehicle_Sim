@@ -99,8 +99,8 @@ class Util(object):
 
             self.delT_data = 0.1
 
-            self.frames_path = "data_sample/frames_Carla_NGSIM_LB"
-            self.mix_model_path = "data_sample/Carla_NGSIM_LB_final_DPGP"
+            self.frames_path = "/home/gauss/Carla_096/TRI_MultiVehicle_Sim/GP/data_sample/frames_Carla_NGSIM_LB"
+            self.mix_model_path = "/home/gauss/Carla_096/TRI_MultiVehicle_Sim/GP/data_sample/Carla_NGSIM_LB_final_DPGP"
 
 
         if self.dataset == 'Ped_biwi': 

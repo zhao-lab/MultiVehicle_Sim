@@ -65,7 +65,7 @@ class Controller2D(object):
         self.v_desired=0 #ref_vel
         self.destination=0
         self.ROI=ROI
-        self._follow_Tlight=True
+        self._follow_Tlight=False
         self._avoid_col=True
         self.GPstrt=0
 
@@ -321,7 +321,7 @@ class Controller2D(object):
 
 
                 V_n=abs(self.v_desired[min_idx,1]*np.sin(yaw)+self.v_desired[min_idx,0]*np.cos(yaw))  # using the reference velocity from closest index of desired velocity
-                # V_n=max(V_n,1)
+                V_n=max(V_n,4)
                 # print('desired velocity',V_n)
                 # vy=self.v_desired[min_idx,1]*np.cos(yaw)-self.v_desired[min_idx,0]*np.sin(yaw)
                 
