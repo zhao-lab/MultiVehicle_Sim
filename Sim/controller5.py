@@ -141,7 +141,7 @@ class controller2():
         self.num_vehicles=0
         if self.running==1.0:
             return
-        m_patterns=["Carla_NGSIM_ROI_LB_Pattern2_Frame110_sim_traj.json"] #["Carla_Town04_T1_Pattern3_Frame33_sim_traj.json","Carla_Town04_T3_Pattern132_Frame133_sim_traj.json","Carla_Town04_T2_Pattern110_Frame11_sim_traj.json"]
+        m_patterns=["Carla_NGSIM_ROI_LB_Pattern2_Frame110_sim_traj_fac0.json"] #["Carla_Town04_T1_Pattern3_Frame33_sim_traj.json","Carla_Town04_T3_Pattern132_Frame133_sim_traj.json","Carla_Town04_T2_Pattern110_Frame11_sim_traj.json"]
         # pattern_file=m_patterns[self.m_pat]
         for pattern_file in m_patterns:
             f_name='Data/'+pattern_file

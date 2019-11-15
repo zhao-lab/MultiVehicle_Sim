@@ -218,7 +218,7 @@ class World(object):
         self.hud.tick(self, clock)
 
     def render(self, display):
-        # print(carla.Vehicle.get_transform(self.player))
+        print(carla.Vehicle.get_transform(self.player))
         self.camera_manager.render(display)
         self.hud.render(display)
 
