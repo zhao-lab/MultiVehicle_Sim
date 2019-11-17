@@ -798,14 +798,14 @@ def game_loop(args):
         # Saving the spawn_points..................................................
         SpawnPoints=client.get_world().get_map().get_spawn_points()
         
-        for i,w in enumerate(SpawnPoints):
-            x=[w.location.x,w.location.y,w.rotation.yaw]
-            if i==0:
-                spn_pts=np.array(x).reshape(1,-1)
-            else:
-                spn_pts=np.vstack((spn_pts,np.array(x).reshape(1,-1)))
+        # for i,w in enumerate(SpawnPoints):
+        #     x=[w.location.x,w.location.y,w.rotation.yaw]
+        #     if i==0:
+        #         spn_pts=np.array(x).reshape(1,-1)
+        #     else:
+        #         spn_pts=np.vstack((spn_pts,np.array(x).reshape(1,-1)))
 
-        np.save('Parking1.npy',spn_pts)
+        # np.save('Parking1.npy',spn_pts)
 
         data_recorder=data_query.dataQ(hud)
         settings=client.get_world().get_settings()
