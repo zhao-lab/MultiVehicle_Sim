@@ -1,5 +1,7 @@
 """
-The LQR controller for lateral control of vehicles in Carla.
+Vehicle Controller. 
+Lateral control: LQR controller 
+Longitudinal control: PID controller/ Bang-bang controller
 
 Author: Ashish Roongta
 SafeAI lab
@@ -357,18 +359,7 @@ class Controller2D(object):
             # ------------------------------------------------------
             
             #     self.carla.command.DestroyActor(vehicle)   # destoryong actor
-            #     return True
             # print(throttle_output,max(-1.0,min(1.0,steer_output)),brake_output)
-        ######################################################
-        ######################################################
-        # MODULE 7: STORE OLD VALUES HERE (ADD MORE IF NECESSARY)
-        ######################################################
-        ######################################################
-        """
-            Use this block to store old values (for example, we can store the
-            current x, y, and yaw values here using persistent variables for use
-            in the next iteration)
-        """
         # self._last_timestamp=t
         self._last_x=x
         self._last_y=y

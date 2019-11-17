@@ -9,6 +9,7 @@ Author: Ashish Roongta
 SafeAI lab
 Carnegie Mellon University
 Copyright @ SafeAI lab-Carnegie Mellon University
+[Purged]
 '''
 
 from __future__ import print_function

@@ -1,7 +1,7 @@
 '''
 Script to Control Multiple Vehicles using the LQR Controller. 
 [Each vehicle with an independent refernce trajectory.]
-[Time gap between spawn of vehicles possible.]
+[Simulation of a single motion pattern]
 [No Rendering possible]
 [This script interfaces with the Carla server, receives the states of the actor vehicles and sends the control commands]
 
@@ -35,8 +35,6 @@ import json
 
 # -------importing the LQR Controller-------------
 from LQR_Controller import *
-# ------importing plotter-----------------
-# from plot_states import *
 
 class controller2():
     def __init__(self):

@@ -1,5 +1,5 @@
 """
-Script for onlinr simulation of motion patterns.
+Script for online simulation of motion patterns.
 Simulates and controls multiple vehicles using the LQR controller. 
 [Each vehicle with an independent refernce trajectory.]
 [All Vehicles spawned at the same time]
@@ -150,22 +150,6 @@ class controller2():
             self.ref_Traj.append(ref)
             self.ref_V.append(ref_v)
 
-
-    #         blueprint_library=self.world.get_blueprint_library()
-    #         bp=random.choice(blueprint_library.filter('vehicle.toyota.*'))
-    #         color=random.choice(bp.get_attribute('color').recommended_values)
-    #         bp.set_attribute('color',color)   
-    #         try:
-    #             self.players.append(self.world.spawn_actor(bp,self.spawn_point))
-    #             print('{} Car spawned'.format(self.ind))
-    #             car_id=self.players[-1].id
-    #             self.controllers[car_id]=Controller2D(self.players[self.ind],ref,ref_v,carla,self.client)
-    #             self.v_id.append(car_id)        
-    #             self.ind+=1
-    #         except RuntimeError:
-    #             print('{} Car experienced collision at spawn time'.format(self.ind))
- 
-
     def GP(self, i, car, x, y):
         """
         Taking the current x and y of the vehicle, return reference trajectory and velocity upto next
@@ -186,46 +170,6 @@ class controller2():
             dist_Sq[i]=(pt.transform.location.x-x)**2+(pt.transform.location.y-y)**2
         
         return self.waypts[np.argmin(dist_Sq)].transform.rotation.yaw
-
-    # def actor_spawn(self):
-    #     '''
-    #     Function to spawn the actor
-    #     '''
-    #     spawn_point1=random.choice(self.map.get_spawn_points())  # Randomly choosing a spawn point by querying from the map
-        
-    #     for car in range(self.num_vehicles):
-    #         # ----loading the reference trajectory-----------------------
-    #         rx=np.array(self.refA[str(car+1)]['x']).reshape(-1,1)
-    #         ry=np.array(self.refA[str(car+1)]['y']).reshape(-1,1)
-    #         ref=np.hstack((rx,ry))
-
-    #         #------Computing the reference velocity--------------
-    #         rx=np.array(self.refA[str(car+1)]['vx']).reshape(-1,1)
-    #         ry=np.array(self.refA[str(car+1)]['vy']).reshape(-1,1)
-    #         ref_v=np.hstack((rx,ry))
-
-        
-    #         spawn_point1.location.x=ref[0,0]
-    #         spawn_point1.location.y=ref[0,1]
-    #         spawn_point1.location.z=2
-    #         spawn_point1.rotation.pitch=0.00193294
-    #         spawn_point1.rotation.yaw= self.closest_waypt(ref[0,0],ref[0,1])#180*theta/np.pi
-    #         spawn_point1.rotation.roll=-0.00494385
-    #         self.spawn_point=spawn_point1
-
-    #         blueprint_library=self.world.get_blueprint_library()
-    #         bp=random.choice(blueprint_library.filter('vehicle.toyota.*'))
-    #         color=random.choice(bp.get_attribute('color').recommended_values)
-    #         bp.set_attribute('color',color)   
-    #         try:
-    #             self.players.append(self.world.spawn_actor(bp,self.spawn_point))
-    #             print('{} Car spawned'.format(self.ind))
-    #             car_id=self.players[-1].id
-    #             self.controllers[car_id]=Controller2D(self.players[self.ind],ref,ref_v,carla,self.client)
-    #             self.v_id.append(car_id)        
-    #             self.ind+=1
-    #         except RuntimeError:
-    #             print('{} Car experienced collision at spawn time'.format(self.ind))
 
     def actor_spawn(self):
         # print('number of available spawn points: {}'.format(len(self.spawn_points)))
@@ -266,18 +210,21 @@ class controller2():
         # -----------------------------------
         self.num_vehicles=4
         self.actor_spawn()
-
-        # m_patterns=["Carla_Town04_T1_Pattern3_Frame33_sim_traj.json","Carla_Town04_T3_Pattern132_Frame133_sim_traj.json","Carla_Town04_T2_Pattern110_Frame11_sim_traj.json"]
-        # # pattern_file=m_patterns[self.m_pat]
-        # for pattern_file in m_patterns:
-        #     f_name='Data/'+pattern_file
-        #     with open(f_name,'r') as ff:
-        #         self.refA=json.load(ff)
-        #     if(pattern_file=="Carla_Town04_T1_Pattern3_Frame33_sim_traj.json"):
-        #         self.num_vehicles=2
-        #     else:
-        #         self.num_vehicles=len(self.refA.keys())   # number of vehicles  
-        #     self.actor_spawn()
+        
+        """
+        For offline simualtion, loading the .json files.......
+        m_patterns=["Carla_Town04_T1_Pattern3_Frame33_sim_traj.json","Carla_Town04_T3_Pattern132_Frame133_sim_traj.json","Carla_Town04_T2_Pattern110_Frame11_sim_traj.json"]
+        # pattern_file=m_patterns[self.m_pat]
+        for pattern_file in m_patterns:
+            f_name='Data/'+pattern_file
+            with open(f_name,'r') as ff:
+                self.refA=json.load(ff)
+            if(pattern_file=="Carla_Town04_T1_Pattern3_Frame33_sim_traj.json"):
+                self.num_vehicles=2
+            else:
+                self.num_vehicles=len(self.refA.keys())   # number of vehicles  
+            self.actor_spawn()
+        """
         self.running=1.0
     
     def destroy_Car(self, car_id):

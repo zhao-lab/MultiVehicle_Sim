@@ -1,7 +1,10 @@
-# Script to Query state information from all the actors, from the Carla Server in real time
-# Author: Ashish Roongta
-# Zhao Lab (Safe-AI Lab)
-#  Carnegie Mellon University
+"""
+Script to Query state information from all the actors, from the Carla Server in real time
+
+Author: Ashish Roongta
+SafeAI lab, Carengie Mellon University
+Copyright @ SafeAI lab, Carnegie Mellon University
+"""
 
 import os
 import numpy as np

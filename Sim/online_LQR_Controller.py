@@ -1,11 +1,14 @@
 """
-LQR controller script for 'online_controller.py'. For online simulation of motion  patterns
-in arla and communication with the DPGP mmodel.
+Vehicle Controller.
+Lateral Control: LQR Controller
+Longitudinal Control: PID controller/ Bang-bang controller
+Modified 'LQR_Controller.py' specifically for 'online_controller.py'. 
+For online simulation of motion  patternsin aCrla and communication with the DPGP mmodel.
 
 The LQR controller for lateral control of vehicles in Carla.
 
 Author: Ashish Roongta
-SAFE AI Lab
+SafeAI Lab
 Carnegie Mellon University
 Copyright @ SafeAI lab-Carnegie Mellon University
 """
@@ -31,8 +34,6 @@ class Controller2D(object):
         self._current_yaw        = loc.rotation.yaw
         self._current_vX      = 0
         self._desired_vY      = 0
-        # self._current_frame      = 0
-        # self._current_timestamp  = 0
         self._start_control_loop = False
         self._set_throttle       = 0
         self._set_brake          = 0
@@ -352,10 +353,6 @@ class Controller2D(object):
                         throttle_output=0.0
                         brake_output=1.0
 
-
-            ######################################################
-            # SET CONTROLS OUTPUT
-            ######################################################
             # self.set_throttle(throttle_output)  # in percent (0 to 1)
             # self.set_steer(steer_output)        # in rad (-1.22 to 1.22)
             # self.set_brake(brake_output)        # in percent (0 to 1)
@@ -364,7 +361,7 @@ class Controller2D(object):
             self._controller.brake=brake_output
             # vehicle.apply_control(self._controller)
 
-            # -----Dstroy vehicles----------------------------
+            # -----Destroy vehicles----------------------------
                 #  Checking if the vehicle is in ROI
             if min_idx>(2*len(waypoints)/3) and not(self.inROI((x,y))):
                 self.destination=1
@@ -375,19 +372,6 @@ class Controller2D(object):
             
             # ------------------------------------------------------
             
-            #     self.carla.command.DestroyActor(vehicle)   # destoryong actor
-            #     return True
-            # print(throttle_output,max(-1.0,min(1.0,steer_output)),brake_output)
-        ######################################################
-        ######################################################
-        # MODULE 7: STORE OLD VALUES HERE (ADD MORE IF NECESSARY)
-        ######################################################
-        ######################################################
-        """
-            Use this block to store old values (for example, we can store the
-            current x, y, and yaw values here using persistent variables for use
-            in the next iteration)
-        """
         # self._last_timestamp=t
         self._last_x=x
         self._last_y=y

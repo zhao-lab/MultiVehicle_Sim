@@ -2,6 +2,7 @@
 Script to Control Multiple Vehicles using the LQR Controller. 
 [Each vehicle with an independent refernce trajectory.]
 [All Vehicles spawned at the same time]
+[Script for offline simulation of a single motion pattern]
 [No Rendering possible]
 [This script interfaces with the Carla server, receives the states of the actor vehicles and sends the control commands]
 

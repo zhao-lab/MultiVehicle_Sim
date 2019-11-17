@@ -1,6 +1,7 @@
 '''
 Script to Control Multiple Vehicles using the LQR Controller. 
 [Each vehicle with an independent refernce trajectory.]
+[Script for offline simulation of multiple motion patterns]
 [All Vehicles spawned at the same time]
 [No Rendering possible]
 [This script interfaces with the Carla server, receives the states of the actor vehicles and sends the control commands]
@@ -102,6 +103,7 @@ class controller2():
             ref_v=np.hstack((rx,ry))
 
             # ---------Computing the initial yaw orientation for spawning vehicle------
+            #  Purged after incorporation of waypoint infoormation of vehicle orientation
             # theta=np.arctan2((ref[1,1]-ref[0,1]),(ref[1,0]-ref[0,0]))
             # print(self.ind, 180*theta/np.pi)
             # ----Defining the Vehicle Spawn point----------------------------------------
@@ -141,6 +143,8 @@ class controller2():
         self.num_vehicles=0
         if self.running==1.0:
             return
+
+        #..List of .json files for the individual motion patterns 
         m_patterns=["Carla_NGSIM_ROI_LB_Pattern2_Frame110_sim_traj_fac0.json"] #["Carla_Town04_T1_Pattern3_Frame33_sim_traj.json","Carla_Town04_T3_Pattern132_Frame133_sim_traj.json","Carla_Town04_T2_Pattern110_Frame11_sim_traj.json"]
         # pattern_file=m_patterns[self.m_pat]
         for pattern_file in m_patterns:
@@ -200,15 +204,9 @@ class controller2():
             # Generating waypoints
             self.waypts=client.get_world().get_map().generate_waypoints(1.0)
             while True:
-                # self.world.tick()
-                # ts=self.world.wait_for_tick()
+                self.world.tick()
+                ts=self.world.wait_for_tick()
                 try:
-                    # spawning all vehicles, one at a time
-                    # for i in range(self.num_vehicles):
-                    #     try:
-                    #         self.actor_spawn()
-                    #     except RuntimeError:
-                    #         print('{} Vehicle experienced collision at spawn'.format(i))
 
                     if self.running==0:
                         self.run_pattern()                     

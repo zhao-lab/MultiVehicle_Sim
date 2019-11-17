@@ -1,10 +1,12 @@
-#!/usr/bin/env python
+"""
+Script for spawning random vehicles around the ROI (Region of Interest).
+To simulate naturalistic traffic.
+[Ref: spawn_npc.py in Carla/PythonAPI/examples]
 
-# Copyright (c) 2019 Computer Vision Center (CVC) at the Universitat Autonoma de
-# Barcelona (UAB).
-#
-# This work is licensed under the terms of the MIT license.
-# For a copy, see <https://opensource.org/licenses/MIT>.
+Author: Ashish Roongta
+SafeAI lab, Carnegie Mellon University
+Copyright @ SafeAI lab-Carengie Mellon University
+"""
 
 """Spawn NPCs into the simulation"""
 
@@ -73,35 +75,35 @@ class spawner:
         """
         # NGSim1 - lankerShim Boulevard.....................................
         # # delta=20    # Width of surrounding region of the ROI to query spawn points
-        # # spawn_points=self.map.get_spawn_points()    #   Querying spawnpoints
-        # waypoints=self.map.generate_waypoints(5.0)   # Generating waypoints at a resolution of 5m
+        spawn_points=self.map.get_spawn_points()    #   Querying spawnpoints
+        waypoints=self.map.generate_waypoints(5.0)   # Generating waypoints at a resolution of 5m
     
-        # self.spawn_points=[]
-        # waypoints=self.map.generate_waypoints(7.0)
-        # for i,w in enumerate(waypoints):
-        #     x=[w.transform.location.x,-w.transform.location.y]
-        #     # if i==0:
-        #     #     wpts=np.array(x).reshape(1,-1)
-        #     # else:
-        #     #     wpts=np.vstack((wpts,np.array(x).reshape(1,-1)))
+        self.spawn_points=[]
+        waypoints=self.map.generate_waypoints(7.0)
+        for i,w in enumerate(waypoints):
+            x=[w.transform.location.x,-w.transform.location.y]
+            # if i==0:
+            #     wpts=np.array(x).reshape(1,-1)
+            # else:
+            #     wpts=np.vstack((wpts,np.array(x).reshape(1,-1)))
 
-        #     if(self.inROI(x,self.ROI_ou) and not(self.inROI(x,self.ROI_in))):
-        #         spawn_point=w.transform
-        #         spawn_point.location.z=2
-        #         self.spawn_points.append(spawn_point)
+            if(self.inROI(x,self.ROI_ou) and not(self.inROI(x,self.ROI_in))):
+                spawn_point=w.transform
+                spawn_point.location.z=2
+                self.spawn_points.append(spawn_point)
 
 
         # -------------------------Map Town04, Unsignalied 4way intersection
         
-        self.spawn_points=self.map.get_spawn_points()[:4]
-        spawnx=[255.257156, 258.637909, 294.50, 222.266479 ]
-        spawny=[-282.577789, -209.931717, -250.234390, -245.930328]
-        spawnyaw=[90.172272, -88.316437, -179.65, -0.500977]
-        for i in range(4):
-            self.spawn_points[i].location.x=spawnx[i]
-            self.spawn_points[i].location.y=spawny[i]
-            self.spawn_points[i].rotation.yaw=spawnyaw[i]
-            # self.spawn_points.append(spawn_point)
+        # self.spawn_points=self.map.get_spawn_points()[:4]
+        # spawnx=[255.257156, 258.637909, 294.50, 222.266479 ]
+        # spawny=[-282.577789, -209.931717, -250.234390, -245.930328]
+        # spawnyaw=[90.172272, -88.316437, -179.65, -0.500977]
+        # for i in range(4):
+        #     self.spawn_points[i].location.x=spawnx[i]
+        #     self.spawn_points[i].location.y=spawny[i]
+        #     self.spawn_points[i].rotation.yaw=spawnyaw[i]
+        #     # self.spawn_points.append(spawn_point)
         
         print('Number of spawn points in the hanger: ',len(self.spawn_points))
 
