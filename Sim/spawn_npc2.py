@@ -1,7 +1,8 @@
 """
 Script for spawning random vehicles around the ROI (Region of Interest).
 To simulate naturalistic traffic.
-[Spawning all the vehicles simultaneously, using synchronous batch mode]
+[Spawning of vehicles at the list of availble spawn points, based on a distribution]
+[Spawning vehicles sequentially, checking for collision at each vehicle.]
 [Ref: spawn_npc.py in Carla/PythonAPI/examples]
 
 Author: Ashish Roongta
@@ -40,6 +41,7 @@ class spawner:
         self.ROI_ou=[[311.13,204.60],[311.13, 289.35],[202.55, 289.35],[202.55, 204.60]]
         self.map=map1
         self.spawn_points=[]
+        self.spae
 
     def sign(self,a,b,c):
         return (a[0]-c[0])*(b[1]-c[1])-(b[0]-c[0])*(a[1]-c[1])
