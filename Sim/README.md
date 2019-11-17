@@ -16,6 +16,6 @@ Dataset Collection: **data_query.py**, example implementation in **manual_contro
 The python version code is implemented by Ashish Roongta @SafeAI lab in CMU. <br>
 The scripts are compatible with Carla 0.9.6.
 
-<p align="center">
+<p align="center" rotate="right">
   <img width="460" height="300" src=images/sim_setup.jpg>
 </p>
