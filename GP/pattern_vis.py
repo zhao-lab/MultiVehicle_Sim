@@ -13,8 +13,6 @@ u = Util()
 with open(u.mix_model_path, "rb") as mix_np:  # load saved mixture model
     mix_model = pickle.load(mix_np)
 
-# with open("data_sample/frames_Uber_od2sq_oneway", "rb") as frame_np: # load saved frames
-#     frames = pickle.load(frame_np)
 frames = mix_model.frames
 
 pattern_num = np.random.randint(mix_model.K)
