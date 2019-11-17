@@ -17,5 +17,5 @@ The python version code is implemented by Ashish Roongta @SafeAI lab in CMU. <br
 The scripts are compatible with Carla 0.9.6.
 
 <p align="center">
-  <img width="460" height="300" src=images/sim_setup.jpg>
+  <img width="1080" height="720" src=images/sim_setup.png>
 </p>
