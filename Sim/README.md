@@ -6,11 +6,11 @@ The offline architecture takes the finite horizon trajectories of all the vehicl
 The driving algorihtm uses the vehical controller (LQR lateral and PID longitudinal), along-with a collision detection and traffic light state detection pipeline to track the finite horizon reference trajectories and velocity profiles.
 This repository also provides a data collection script to generate datasets from the Carla Simulator. The recorded dataset contains states (position, velcoity, acceleration) of all the agents (vehicles and pedestrians), traffic light locations and states, as well as location of speed limit signs. 
 
-###Implement
+### Implement
 Control vehicle using Logitech G920 steering controller: manual_control_steeringwheel.py
 Online simualtion of traffic patterns: online_controller.py
 Offline simulation of multiple traffic patterns: controller5.py
 Offline simulation of single traffic pattern: controller4.py
-
+Dataset Collection: data_query.py, example implementation in manual_control.py
 The python version code is implemented by Ashish Roongta @SafeAI lab in CMU.
 The scripts are compatible with Carla 0.9.6.
