@@ -12,7 +12,7 @@ class dataQ():
 
 	def __init__(self,hud):
 		############File_argumensts####################################
-		self.date='NGSim_ROI1'
+		self.date='NGSim_ROI_const'
 		self.test='LB'                      # indication of the experiment number
 		self.data_dir='../../Data_Record/'    #File directory
 
@@ -37,7 +37,7 @@ class dataQ():
 		accl=actor.get_acceleration()
 		Wvel=actor.get_angular_velocity()
 		control=actor.get_control()
-		time=round(self.HUD.simulation_time-self.start_time,2)
+		time=round(self.HUD.simulation_time-self.start_time,3)
 		if _id in self.ego_vehicles:
 			hero=1
 		else:

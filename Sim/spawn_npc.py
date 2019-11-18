@@ -30,16 +30,21 @@ import logging
 import random
 import numpy as np
 import time
+import data_query
 
 class spawner:
 
     def __init__(self, map1):
-        # self.ROI_in=[[-1720,-1956.5],[-1657, -1928],[-1660, -1838],[-1738,-1887]]
-        # self.ROI_ou=[[-1734,-1986.5],[-1631, -1927],[-1631,-1754.5],[-1785,-1870]]
-        self.ROI_in=[[281.13,224.60],[281.13, 269.35],[232.55, 269.35],[232.55, 224.60]]
-        self.ROI_ou=[[311.13,204.60],[311.13, 289.35],[202.55, 289.35],[202.55, 204.60]]
+        # ----------NGSim1-------------------------------------------------
+        self.ROI_in=[[-1720,-1956.5],[-1657, -1928],[-1660, -1838],[-1738,-1887]]
+        self.ROI_ou=[[-1734,-1986.5],[-1631, -1927],[-1631,-1754.5],[-1785,-1870]]
+
+        # --------Carla Map Town 04----------------------------
+        # self.ROI_in=[[281.13,224.60],[281.13, 269.35],[232.55, 269.35],[232.55, 224.60]]
+        # self.ROI_ou=[[311.13,204.60],[311.13, 289.35],[202.55, 289.35],[202.55, 204.60]]
         self.map=map1
         self.spawn_points=[]
+        self.record_data=True
 
     def sign(self,a,b,c):
         return (a[0]-c[0])*(b[1]-c[1])-(b[0]-c[0])*(a[1]-c[1])
@@ -177,8 +182,23 @@ def main():
         SpawnActor = carla.command.SpawnActor
         SetAutopilot = carla.command.SetAutopilot
         FutureActor = carla.command.FutureActor
+
+        # ----Fixed time-step configuration for the simulation------------
+        settings = world.get_settings()
+        settings.fixed_delta_seconds = 0.1
+        world.apply_settings(settings)
+
+        # --Setting the simulator in synchronous mode---------
+        settings=client.get_world().get_settings()
+        settings._synchronous_mode=True
+        client.get_world().apply_settings(settings)
+
+        # Instantiating the data recorder class----------------------
+        # data_recorded = data_query.
+        # print(dir(world))
         while(True):
-            world.wait_for_tick()
+            wt = world.wait_for_tick()
+            print(wt.delta_seconds, wt.elapsed_seconds, wt.frame, wt.frame_count)
             # --------------
             # Spawn vehicles
             # --------------
@@ -192,13 +212,14 @@ def main():
                 spawnNow=False
 
             vehicles_list=world.get_actors().filter('vehicle.*')
-            if(len(vehicles_list)<=0):
-                spawnNow=True
+            # if(len(vehicles_list)<=0):
+            #     spawnNow=True
 
-            for car in vehicles_list:
+            for car in vehicles_list: 
                 lc=car.get_transform().location
                 if not(garage.inROI([lc.x,-lc.y],garage.ROI_ou)):
                     car.destroy()
+            world.tick()
 
     finally:
 

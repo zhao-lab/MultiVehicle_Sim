@@ -796,7 +796,7 @@ def game_loop(args):
         controller = KeyboardControl(world, args.autopilot)
 
         # Saving the spawn_points..................................................
-        SpawnPoints=client.get_world().get_map().get_spawn_points()
+        # SpawnPoints=client.get_world().get_map().get_spawn_points()
         
         # for i,w in enumerate(SpawnPoints):
         #     x=[w.location.x,w.location.y,w.rotation.yaw]
