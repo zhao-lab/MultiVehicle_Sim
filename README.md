@@ -4,5 +4,5 @@ The python version code for the DPGP algorithm implemented by Vinay Varma Kalidi
 The driving algorithm, vehicle controller and Carla client codes have been implemented by Ashish Roongta @SafeAI lab, Carnegie Mellon University.
 
 <p align="center">
-  <src=images/online_sim.png>
+  <img src=images/online_sim.png>
 </p>
