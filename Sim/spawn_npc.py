@@ -210,10 +210,6 @@ def main():
         print('\ndestroying %d vehicles' % len(vehicles_list))
         client.apply_batch([carla.command.DestroyActor(x) for x in vehicles_list])
 
-        # stop walker controllers (list is [controler, actor, controller, actor ...])
-        for i in range(0, len(all_id), 2):
-            all_actors[i].stop()
-
         print('\ndestroying %d walkers' % len(walkers_list))
         client.apply_batch([carla.command.DestroyActor(x) for x in all_id])
 

@@ -41,7 +41,7 @@ class spawner:
 
         # --------Carla Map Town 04----------------------------
         self.ROI_in = [[281.13,224.60],[281.13, 269.35],[232.55, 269.35],[232.55, 224.60]]
-        self.ROI_ou = [[311.13,204.60],[311.13, 289.35],[202.55, 289.35],[202.55, 204.60]]
+        self.ROI_ou = [[300.13,204.60],[301.13, 289.35],[212.55, 289.35],[212.55, 204.60]]
         self.world = world
         self.map = world.get_map()
         self.spawn_points = []
@@ -102,7 +102,6 @@ class spawner:
 
 
         # -------------------------Map Town04, Unsignalied 4way intersection
-        
         self.spawn_points=self.map.get_spawn_points()[:4]
         spawnx=[255.257156, 258.637909, 294.50, 222.266479 ]
         spawny=[-282.577789, -209.931717, -250.234390, -245.930328]
@@ -115,29 +114,32 @@ class spawner:
         
         print('Number of spawn points in the hanger: ',len(self.spawn_points))
 
-    def spawn_vehicles(self, frame, df=10):
+    def spawn_vehicles(self, frame, df=100):
         """
         Function to spawn vehicles at the list of spawn points.
         """
-        if not(frame%10==0):
+        if (frame - self.last_frame < df):
             return 
         else:
             # spts=random.choice(len(self.spawnpoints))
-            for i in range(len(self.spawnpoints)):
+            for i in range(len(self.spawn_points)):
                 # Randomly choosing spawn points, (Naturalisitic Traffic simulation)
-                spawn_point = random.choice(self.spawnpoints)     
+                spawn_point = self.spawn_points[i]     
                 blueprint = random.choice(self.blueprints)
                 actor = self.world.try_spawn_actor(blueprint, spawn_point)
+                if(actor == None):
+                    continue
                 actor.set_autopilot()   # Setting the vehicle control in autpolit mode
                 self.actors.append(actor)
+            self.last_frame = frame
 
     def check_VState(self):
         """
         To remove the vehicles (kill the actors) that have moved out of the region of interest...
         """
-        for actors in self.actors:
+        for actor in self.actors:
             lc = actor.get_transform().location
-            if not(self.inROI([lc.x, -lc.y], ROI.ou)):
+            if not(self.inROI([lc.x, -lc.y], self.ROI_ou)):
                 actor.destroy()
                 self.actors.remove(actor)
 
@@ -164,10 +166,10 @@ def main():
         default=2000,
         type=int,
         help='TCP port to listen to (default: 2000)')
-    argparse.add_argument(
+    argparser.add_argument(
         '--fps',
-        default=30
-        type=int
+        default=30,
+        type=int,
         help='The simulation fps')
     args = argparser.parse_args()
 
@@ -180,6 +182,7 @@ def main():
 
         # Instantiating an object of the spawner class
         garage=spawner(world)   
+        garage.spawn_hangar()
 
         # Configuring the simulation to run at a constant fps and in sycnhronous mode.
         fps = args.fps
@@ -187,10 +190,13 @@ def main():
         settings.sycnhronous_mode = True
         settings.fixed_delta_seconds = 1.0/fps
         world.apply_settings(settings)
-
+        print(dir(world.tick()))
         while(True):
-            frame = world.tick()
-            print(frame)
+            try:
+                frame = world.tick()
+            except RuntimeError:
+                continue
+            # print(frame)
             # Spawning Vehicles based on random distribution
             garage.spawn_vehicles(frame)
 
