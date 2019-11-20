@@ -30,7 +30,6 @@ import logging
 import random
 import numpy as np
 import time
-import data_query
 
 class spawner:
 
@@ -44,7 +43,6 @@ class spawner:
         # self.ROI_ou=[[311.13,204.60],[311.13, 289.35],[202.55, 289.35],[202.55, 204.60]]
         self.map=map1
         self.spawn_points=[]
-        self.record_data=True
 
     def sign(self,a,b,c):
         return (a[0]-c[0])*(b[1]-c[1])-(b[0]-c[0])*(a[1]-c[1])
@@ -183,22 +181,9 @@ def main():
         SetAutopilot = carla.command.SetAutopilot
         FutureActor = carla.command.FutureActor
 
-        # ----Fixed time-step configuration for the simulation------------
-        settings = world.get_settings()
-        settings.fixed_delta_seconds = 0.1
-        world.apply_settings(settings)
-
-        # --Setting the simulator in synchronous mode---------
-        settings=client.get_world().get_settings()
-        settings._synchronous_mode=True
-        client.get_world().apply_settings(settings)
-
-        # Instantiating the data recorder class----------------------
-        # data_recorded = data_query.
-        # print(dir(world))
+        
         while(True):
-            wt = world.wait_for_tick()
-            print(wt.delta_seconds, wt.elapsed_seconds, wt.frame, wt.frame_count)
+            world.wait_for_tick()
             # --------------
             # Spawn vehicles
             # --------------
@@ -212,14 +197,13 @@ def main():
                 spawnNow=False
 
             vehicles_list=world.get_actors().filter('vehicle.*')
-            # if(len(vehicles_list)<=0):
-            #     spawnNow=True
+            if(len(vehicles_list)<=0):
+                spawnNow=True
 
-            for car in vehicles_list: 
+            for car in vehicles_list:
                 lc=car.get_transform().location
                 if not(garage.inROI([lc.x,-lc.y],garage.ROI_ou)):
                     car.destroy()
-            world.tick()
 
     finally:
 
