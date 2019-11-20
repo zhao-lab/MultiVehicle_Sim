@@ -12,6 +12,7 @@ Online simualtion of traffic patterns: **online_controller.py** <br>
 Offline simulation of multiple traffic patterns: **controller5.py** <br>
 Offline simulation of single traffic pattern: **controller4.py** <br>
 Dataset Collection: **data_query.py**, example implementation in **manual_control.py** <br>
+Spawn random vehicles around Region of Interest (ROI): **spawn_npc.py** and **spawn_npc2.py** (in-progress) 
 
 The python version code is implemented by Ashish Roongta @SafeAI lab in CMU. <br>
 The scripts are compatible with Carla 0.9.6.
