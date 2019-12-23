@@ -190,13 +190,13 @@ def main():
         settings.sycnhronous_mode = True
         settings.fixed_delta_seconds = 1.0/fps
         world.apply_settings(settings)
-        print(dir(world.tick()))
+        # print(dir(world.tick()))
         while(True):
             try:
                 frame = world.tick()
             except RuntimeError:
                 continue
-            # print(frame)
+            print(frame)
             # Spawning Vehicles based on random distribution
             garage.spawn_vehicles(frame)
 

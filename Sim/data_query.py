@@ -12,8 +12,8 @@ class dataQ():
 
 	def __init__(self,hud):
 		############File_argumensts####################################
-		self.date='NGSim_ROI_const'
-		self.test='LB'                      # indication of the experiment number
+		self.date='Town4_Tintersect'
+		self.test='1'                      # indication of the experiment number
 		self.data_dir='../../Data_Record/'    #File directory
 
 

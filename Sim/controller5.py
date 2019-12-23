@@ -145,7 +145,7 @@ class controller2():
             return
 
         #..List of .json files for the individual motion patterns 
-        m_patterns=["Carla_NGSIM_ROI_LB_Pattern2_Frame110_sim_traj_fac0.json"] #["Carla_Town04_T1_Pattern3_Frame33_sim_traj.json","Carla_Town04_T3_Pattern132_Frame133_sim_traj.json","Carla_Town04_T2_Pattern110_Frame11_sim_traj.json"]
+        m_patterns=["Carla_Town04_T1_Pattern3_Frame33_sim_traj.json","Carla_Town04_T3_Pattern132_Frame133_sim_traj.json","Carla_Town04_T2_Pattern110_Frame11_sim_traj.json"]
         # pattern_file=m_patterns[self.m_pat]
         for pattern_file in m_patterns:
             f_name='Data/'+pattern_file
@@ -204,7 +204,7 @@ class controller2():
             # Generating waypoints
             self.waypts=client.get_world().get_map().generate_waypoints(1.0)
             while True:
-                self.world.tick()
+                # self.world.tick()
                 ts=self.world.wait_for_tick()
                 try:
 
@@ -235,7 +235,10 @@ class controller2():
                     
                 except KeyError:
                     pass
-                # self.world.tick()
+                try:    
+                    self.world.tick()
+                except RuntimeError:
+                    continue
                 # ts=self.world.wait_for_tick()
         finally:
             print("Went into finally")

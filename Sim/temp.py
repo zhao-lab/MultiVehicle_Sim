@@ -22,20 +22,22 @@ if __name__=='__main__':
         previous_settings = world.get_settings()
         world.apply_settings(carla.WorldSettings(
             synchronous_mode=True,
-            fixed_delta_seconds=1.0 / 30.0))
+            fixed_delta_seconds=1.0 / 10.0))
         spawn_points = world.get_map().get_spawn_points()
         blueprint_library = world.get_blueprint_library()
-        vehicle_bp = random.choice(blueprint_library.filter('vehicle.bmw.*'))
+        vehicle_bp = random.choice(blueprint_library.filter('vehicle.toyota.*'))
         actors = []
-        for i in range(0, 80):
-            actor = world.spawn_actor(vehicle_bp, spawn_points[i % len(spawn_points)])
+        print("number of spawn points: {}".format(len(spawn_points)))
+        for i in range(len(spawn_points)): #0, len(spawn_points)):
+            actor = world.try_spawn_actor(vehicle_bp, spawn_points[i % len(spawn_points)])
+            if actor==None:
+                continue
             actor.set_autopilot()
             actors.append(actor)
         last_number = 0
         while True:
             frame = world.tick()
-            print(len(actors))
-            print(frame - last_number == 1)
+            # print(frame - last_number == 1)
             last_number = frame
             # time.sleep(0.3)
     finally:

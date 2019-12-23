@@ -16,10 +16,6 @@ Change your wheel_config.ini according to your steering wheel.
 
 To find out the values of your steering wheel use jstest-gtk in Ubuntu.
 
-***************************************************
-Modified for the Logitech G920 Steering Wheel
-***************************************************
-
 """
 
 from __future__ import print_function
@@ -149,7 +145,7 @@ class World(object):
         cam_index = self.camera_manager.index if self.camera_manager is not None else 0
         cam_pos_index = self.camera_manager.transform_index if self.camera_manager is not None else 0
         # Get a random blueprint.
-        blueprint = random.choice(self.world.get_blueprint_library().filter(self._actor_filter))
+        blueprint = random.choice(self.world.get_blueprint_library().filter('vehicle.toyota.*'))
         blueprint.set_attribute('role_name', 'hero')
         if blueprint.has_attribute('color'):
             color = random.choice(blueprint.get_attribute('color').recommended_values)
@@ -165,10 +161,21 @@ class World(object):
         while self.player is None:
             spawn_points = self.world.get_map().get_spawn_points()
             spawn_point = random.choice(spawn_points) if spawn_points else carla.Transform()
-            # spawn_point.location.x=186.244293
-            # spawn_point.location.y=-169.836914
-            # spawn_point.rotation.yaw=-94.049957
-            self.player = self.world.try_spawn_actor(blueprint, spawn_point)
+            # T2---------
+            spawn_point.location.x=-397.560974
+            spawn_point.location.y=33.838902
+            spawn_point.rotation.yaw=0.245005
+
+            # T1-----------------------
+            # spawn_point.location.x=-383.958771
+            # spawn_point.location.y=-14.223001
+            # spawn_point.rotation.yaw=97.998695
+
+            # T3-----------------------
+            # spawn_point.location.x=-331.660095
+            # spawn_point.location.y=15.846524
+            # spawn_point.rotation.yaw=179.965012
+            # self.player = self.world.try_spawn_actor(blueprint, spawn_point)
         # Set up the sensors.
         self.collision_sensor = CollisionSensor(self.player, self.hud)
         self.lane_invasion_sensor = LaneInvasionSensor(self.player, self.hud)

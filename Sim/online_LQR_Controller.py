@@ -48,10 +48,11 @@ class Controller2D(object):
         self._Ca=13000  # cornering stiffness of each tire
         self._Iz=3500   # Yaw inertia
         self._f=0.01   # friction coefficient
-        # phy=vehicle.get_physics_control()
+        phy=vehicle.get_physics_control()
+        # print(self.carla.WheelPhysicsControl.tire_friction)
         # phy.mass=2000
         # vehicle.apply_physics_control(phy)
-        self._m=3500   # mass of the vehicle
+        self._m=phy.mass   # mass of the vehicle
         self._g=10  # acceleration to the gravity (m/s^2)
         self._last_x=0.0  #to store the last x position of the vehicle
         self._last_y=0.0  # to store the previous y position of the vehicle
