@@ -59,7 +59,7 @@ class controller2():
         self.ind=0
         self.v_id=[]
         #  loading the reference trajectories for all vehicles........
-        with open('Data/Carla_NGSIM_LB_Pattern16_Frame0_sim_traj.json','r') as ff:
+        with open('Data/Carla_Town04_T2_Pattern110_Frame11_var2.json','r') as ff:
             self.refA=json.load(ff)
         self.num_vehicles=len(self.refA.keys())   # number of vehicles
 

@@ -44,7 +44,7 @@ class Controller2D(object):
         self._lf=1.0    # length from front tire to the center of mass
         self._Ca=13000  # cornering stiffness of each tire
         self._Iz=3500   # Yaw inertia
-        self._f=0.01   # friction coefficient
+        self._f=0.6   # friction coefficient
         # phy=vehicle.get_physics_control()
         # phy.mass=2000
         # vehicle.apply_physics_control(phy)
@@ -62,7 +62,7 @@ class Controller2D(object):
         self._last_vx_error=0.0
         self.v_desired=ref_vel
         self.destination=0
-        self._follow_Tlight=True
+        self._follow_Tlight=False
         self._avoid_col=True
 
 
@@ -93,9 +93,9 @@ class Controller2D(object):
         """
         Function to compute the throttle and the brake output using a PID controller.
         """
-        kp=15
+        kp=1
         kd=0.1
-        ki=-150
+        ki=1
         integral_error=vx_error+self._last_vx_error
         derivative_error=vx_error-self._last_vx_error
         delta=kp*vx_error+ki*integral_error*dt+kd*derivative_error/dt
@@ -170,7 +170,7 @@ class Controller2D(object):
         return not(has_neg and has_pos)
 
 
-    def collision_check(self):
+    def collision_check(self, vel):
         """
         Function to check if a vehicle is in front and avoid collision.
         """
@@ -178,7 +178,10 @@ class Controller2D(object):
         t=self._vehicle.get_transform()
         x=t.location.x
         y=-t.location.y
-        d=10     #   Threshold distance to break and avoid collision
+        if vel <= 3:
+            d = 6.5
+        else:
+            d=10.5     #   Threshold distance to break and avoid collision
         w=1.5
         a=(x,y)
         psi=-t.rotation.yaw*np.pi/180
@@ -312,15 +315,15 @@ class Controller2D(object):
                 # vy=self.v_desired[min_idx,1]*np.cos(yaw)-self.v_desired[min_idx,0]*np.sin(yaw)
                 
                 # -----Bang Bang Longitudanal Control------------
-                if np.linalg.norm(np.array([vx,vy]))<V_n:
-                    throttle_output=1.0
-                    brake_output=0.0
-                else:
-                    throttle_output=0.0
-                    brake_output=0.2
+                # if np.linalg.norm(np.array([vx,vy]))<V_n:
+                #     throttle_output=1.0
+                #     brake_output=0.0
+                # else:
+                #     throttle_output=0.0
+                #     brake_output=0.2
 
                 # ------Longitudanal PID control-----------
-                # throttle_output,brake_output=self.PID_longitudanal(dt,self.v_desired[min_idx]-vx)
+                throttle_output,brake_output=self.PID_longitudanal(dt,V_n-vx)
 
                 # -----Checking for the Trafic light state and presence-----
                 if self._follow_Tlight:
@@ -332,7 +335,7 @@ class Controller2D(object):
 
                 # -----Chekcing for collision----------
                 if self._avoid_col:
-                    if self.collision_check():
+                    if self.collision_check(vx):
                         throttle_output=0.0
                         brake_output=1.0
 
