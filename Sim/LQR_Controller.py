@@ -122,29 +122,28 @@ class Controller2D(object):
         Function to compute the curvature of the reference trajectory.
         Returns an array containing the curvature at each waypoint
         '''
-        x=waypoints[:,0]
-        y=waypoints[:,1]
-        sig=10
-        x1=gaussian_filter1d(x,sigma=sig,order=1,mode="wrap")
-        x2=gaussian_filter1d(x1,sigma=sig,order=1,mode="wrap")
-        y1=gaussian_filter1d(y,sigma=sig,order=1,mode="wrap")
-        y2=gaussian_filter1d(y1,sigma=sig,order=1,mode="wrap")
-        curv=np.divide(np.abs(x1*y2-y1*x2),np.power(x1**2+y1**2,3./2))
-        return curv
-
-        # traj = np.asarray(waypoints)
-        # sigma_gaus = 10
-        # xp = scipy.ndimage.filters.gaussian_filter1d(input=traj[:,0],sigma=sigma_gaus,order=1)
-        # xpp = scipy.ndimage.filters.gaussian_filter1d(input=traj[:,0],sigma=sigma_gaus,order=2)
-        # yp = scipy.ndimage.filters.gaussian_filter1d(input=traj[:,1],sigma=sigma_gaus,order=1)
-        # ypp = scipy.ndimage.filters.gaussian_filter1d(input=traj[:,1],sigma=sigma_gaus,order=2)
-        # curv=np.zeros(len(traj))
- 
-        # for i in range(len(xp)):
-        #     curv[i] = (xp[i]*ypp[i] - yp[i]*xpp[i])/(xp[i]**2 + yp[i]**2)**1.5
-
-
+        # x=waypoints[:,0]
+        # y=waypoints[:,1]
+        # sig=10
+        # x1=gaussian_filter1d(x,sigma=sig,order=1,mode="wrap")
+        # x2=gaussian_filter1d(x1,sigma=sig,order=1,mode="wrap")
+        # y1=gaussian_filter1d(y,sigma=sig,order=1,mode="wrap")
+        # y2=gaussian_filter1d(y1,sigma=sig,order=1,mode="wrap")
+        # curv=np.divide(np.abs(x1*y2-y1*x2),np.power(x1**2+y1**2,3./2))
         # return curv
+
+        traj = np.asarray(waypoints)
+        sigma_gaus = 10
+        xp = scipy.ndimage.filters.gaussian_filter1d(input=traj[:,0],sigma=sigma_gaus,order=1)
+        xpp = scipy.ndimage.filters.gaussian_filter1d(input=traj[:,0],sigma=sigma_gaus,order=2)
+        yp = scipy.ndimage.filters.gaussian_filter1d(input=traj[:,1],sigma=sigma_gaus,order=1)
+        ypp = scipy.ndimage.filters.gaussian_filter1d(input=traj[:,1],sigma=sigma_gaus,order=2)
+        curv=np.zeros(len(traj))
+ 
+        for i in range(len(xp)):
+            curv[i] = (xp[i]*ypp[i] - yp[i]*xpp[i])/(xp[i]**2 + yp[i]**2)**1.5
+
+        return curv
     
     def wrap2pi(self,a):
         return (a + np.pi) % (2 * np.pi) - np.pi

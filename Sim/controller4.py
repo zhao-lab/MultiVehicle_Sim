@@ -51,7 +51,7 @@ class controller2():
     def __init__(self):
         self.no_rendering=False
         self.world=None
-        self._synchronous_mode=True
+        self._synchronous_mode=False
         self.map=None
         self.controllers={}
         self.spawn_point=None
@@ -59,7 +59,7 @@ class controller2():
         self.ind=0
         self.v_id=[]
         #  loading the reference trajectories for all vehicles........
-        with open('Data/Carla_Town04_Highway_Pattern13_FrameInk.json','r') as ff:
+        with open('Data/Carla_Town04_Highway_Pattern12_FrameInk.json','r') as ff:
             self.refA=json.load(ff)
 
         self.num_vehicles=len(self.refA.keys())   # number of vehicles
@@ -112,7 +112,7 @@ class controller2():
     
         spawn_point1.location.x=ref[0,0]
         spawn_point1.location.y=ref[0,1]
-        spawn_point1.location.z=2
+        spawn_point1.location.z=7
         spawn_point1.rotation.pitch=0.00193294
         spawn_point1.rotation.yaw= self.closest_waypt(ref[0,0],ref[0,1])#180*theta/np.pi
         spawn_point1.rotation.roll=-0.00494385
