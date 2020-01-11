@@ -1,44 +1,5 @@
-#!/usr/bin/env python
-
-# Copyright (c) 2019 Computer Vision Center (CVC) at the Universitat Autonoma de
-# Barcelona (UAB).
-#
-# This work is licensed under the terms of the MIT license.
-# For a copy, see <https://opensource.org/licenses/MIT>.
-
-# Allows controlling a vehicle with a keyboard. For a simpler and more
-# documented example, please take a look at tutorial.py.
-
 """
-Welcome to CARLA manual control.
-
-Use ARROWS or WASD keys for control.
-
-    W            : throttle
-    S            : brake
-    AD           : steer
-    Q            : toggle reverse
-    Space        : hand-brake
-    P            : toggle autopilot
-    M            : toggle manual transmission
-    ,/.          : gear up/down
-
-    TAB          : change sensor position
-    `            : next sensor
-    [1-9]        : change to sensor [1-9]
-    C            : change weather (Shift+C reverse)
-    Backspace    : change vehicle
-
-    R            : toggle recording images to disk
-
-    CTRL + R     : toggle recording of simulation (replacing any previous)
-    CTRL + P     : start replaying last recorded simulation
-    CTRL + +     : increments the start time of the replay by 1 second (+SHIFT = 10 seconds)
-    CTRL + -     : decrements the start time of the replay by 1 second (+SHIFT = 10 seconds)
-
-    F1           : toggle HUD
-    H/?          : toggle help
-    ESC          : quit
+2 Camera views
 """
 
 from __future__ import print_function
@@ -63,7 +24,7 @@ except IndexError:
 
 
 # ==============================================================================
-# -- imports -------------------------------------------------------------------
+# -- imports -------------------------------------------------------    ------------
 # ==============================================================================
 
 
@@ -180,6 +141,7 @@ class World(object):
             blueprint.set_attribute('driver_id', driver_id)
         if blueprint.has_attribute('is_invincible'):
             blueprint.set_attribute('is_invincible', 'true')
+
         # Spawn the player.
         if self.player is not None:
             spawn_point = self.player.get_transform()
@@ -197,6 +159,9 @@ class World(object):
             # # spawn_point.location.y=-169.836914
             # spawn_point.rotation.yaw=-0.577423
             self.player = self.world.try_spawn_actor(blueprint, spawn_point)
+        # ----------------------
+
+
         # Set up the sensors.
         self.collision_sensor = CollisionSensor(self.player, self.hud)
         self.lane_invasion_sensor = LaneInvasionSensor(self.player, self.hud)
@@ -204,6 +169,11 @@ class World(object):
         self.camera_manager = CameraManager(self.player, self.hud, self._gamma)
         self.camera_manager.transform_index = cam_pos_index
         self.camera_manager.set_sensor(cam_index, notify=False)
+
+        self.camera_manager2 = CameraManager(self.player, self.hud, self._gamma)
+        self.camera_manager2.transform_index = cam_pos_index
+        self.camera_manager2.set_sensor(cam_index, notify=False)
+        
         actor_type = get_actor_display_name(self.player)
         self.hud.notification(actor_type)
 
@@ -220,6 +190,7 @@ class World(object):
     def render(self, display):
         # print(carla.Vehicle.get_transform(self.player))
         self.camera_manager.render(display)
+        self.camera_manager2.render(display)
         self.hud.render(display)
 
     def destroy_sensors(self):
@@ -795,6 +766,7 @@ def game_loop(args):
         world = World(client.get_world(), hud, args)
         controller = KeyboardControl(world, args.autopilot)
 
+        # ----------
         # Saving the spawn_points..................................................
         # SpawnPoints=client.get_world().get_map().get_spawn_points()
         
@@ -807,7 +779,7 @@ def game_loop(args):
 
         # np.save('Parking1.npy',spn_pts)
 
-        data_recorder=data_query.dataQ(hud)
+        # data_recorder=data_query.dataQ(hud)
         settings=client.get_world().get_settings()
         settings._synchronous_mode=True
         client.get_world().apply_settings(settings)
@@ -816,9 +788,9 @@ def game_loop(args):
         while True:
             clock.tick_busy_loop(60)
             # -----Data Query ----------------------------
-            wrld_snp=client.get_world().wait_for_tick()
-            actor_list=client.get_world().get_actors()
-            data_recorder.data_input(actor_list,wrld_snp.frame)
+            # wrld_snp=client.get_world().wait_for_tick()
+            # actor_list=client.get_world().get_actors()
+            # data_recorder.data_input(actor_list,wrld_snp.frame)
 
             if controller.parse_events(client, world, clock):
                 return
@@ -834,7 +806,7 @@ def game_loop(args):
         if world is not None:
             world.destroy()
         
-        data_recorder.data_save()
+        # data_recorder.data_save()
 
         pygame.quit()
 

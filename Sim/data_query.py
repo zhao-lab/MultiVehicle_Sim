@@ -12,8 +12,8 @@ class dataQ():
 
 	def __init__(self,hud):
 		############File_argumensts####################################
-		self.date='Town4_Tintersect'
-		self.test='1'                      # indication of the experiment number
+		self.date='PittD'
+		self.test='T_inter2'                      # indication of the experiment number
 		self.data_dir='../../Data_Record/'    #File directory
 
 
@@ -23,6 +23,8 @@ class dataQ():
 		self.ego_vehicles=[]
 		self.start_time=self.HUD.simulation_time
 		self.attr_num=22
+		self.ROI_x = [-16, 67]
+		self.ROI_y = [367, 446]
 
 
 	def data_manage(self,actor):
@@ -31,6 +33,14 @@ class dataQ():
 		_id=actor.id
 		tranform=actor.get_transform()
 		location=tranform.location
+
+		# Checking if the vehicle asset is within the ROI bounds.....
+		rx = self.ROI_x
+		ry = self.ROI_y
+		if not(location.x>=rx[0] and location.x<=rx[1] and location.y>=ry[0] and location.y<=ry[1]):
+			return
+
+		# ---------------------
 		rotation=tranform.rotation
 		frame=self.frame
 		velocity=actor.get_velocity()
@@ -49,10 +59,11 @@ class dataQ():
 
 		if not(_id in self.actors):
 			self.actors[_id]=np.empty((0,self.attr_num))
-		self.actors[_id]=np.vstack((self.actors[_id],[frame,time,_id,hero,location.x,location.y,location.y,rotation.pitch,rotation.yaw,rotation.roll,
-			velocity.x,velocity.y,velocity.z,accl.x,accl.y,accl.z,Wvel.x,Wvel.y,Wvel.z,control.throttle,control.steer,
+		self.actors[_id]=np.vstack((self.actors[_id],[frame,time,_id,hero,location.x,-location.y,location.z,rotation.pitch,-rotation.yaw,rotation.roll,
+			velocity.x,-velocity.y,velocity.z,accl.x,-accl.y,accl.z,Wvel.x,-Wvel.y,Wvel.z,control.throttle,control.steer,
 			control.brake]))
 		pass
+
 	def data_input(self,actor_list,frame):
 		'''
 		Function to take the actor_list from Carla server and work on it

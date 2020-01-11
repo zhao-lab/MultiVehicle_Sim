@@ -122,7 +122,6 @@ class Controller2D(object):
         Function to compute the curvature of the reference trajectory.
         Returns an array containing the curvature at each waypoint
         '''
-        # waypoints=np.asarray(waypoints)
         x=waypoints[:,0]
         y=waypoints[:,1]
         sig=10
@@ -132,6 +131,20 @@ class Controller2D(object):
         y2=gaussian_filter1d(y1,sigma=sig,order=1,mode="wrap")
         curv=np.divide(np.abs(x1*y2-y1*x2),np.power(x1**2+y1**2,3./2))
         return curv
+
+        # traj = np.asarray(waypoints)
+        # sigma_gaus = 10
+        # xp = scipy.ndimage.filters.gaussian_filter1d(input=traj[:,0],sigma=sigma_gaus,order=1)
+        # xpp = scipy.ndimage.filters.gaussian_filter1d(input=traj[:,0],sigma=sigma_gaus,order=2)
+        # yp = scipy.ndimage.filters.gaussian_filter1d(input=traj[:,1],sigma=sigma_gaus,order=1)
+        # ypp = scipy.ndimage.filters.gaussian_filter1d(input=traj[:,1],sigma=sigma_gaus,order=2)
+        # curv=np.zeros(len(traj))
+ 
+        # for i in range(len(xp)):
+        #     curv[i] = (xp[i]*ypp[i] - yp[i]*xpp[i])/(xp[i]**2 + yp[i]**2)**1.5
+
+
+        # return curv
     
     def wrap2pi(self,a):
         return (a + np.pi) % (2 * np.pi) - np.pi
@@ -309,21 +322,23 @@ class Controller2D(object):
 
 
 
-                V_n=abs(self.v_desired[min_idx,1]*np.sin(yaw)+self.v_desired[min_idx,0]*np.cos(yaw))  # using the reference velocity from closest index of desired velocity
+                # V_n=abs(self.v_desired[min_idx,1]*np.sin(yaw)+self.v_desired[min_idx,0]*np.cos(yaw))  # using the reference velocity from closest index of desired velocity
+                V_n=np.sqrt(self.v_desired[min_idx,1]**2+self.v_desired[min_idx,0]**2)  # using the reference velocity from closest index of desired velocity
+
                 # V_n=max(V_n,1)
                 # print(V_n)
                 # vy=self.v_desired[min_idx,1]*np.cos(yaw)-self.v_desired[min_idx,0]*np.sin(yaw)
                 
                 # -----Bang Bang Longitudanal Control------------
-                # if np.linalg.norm(np.array([vx,vy]))<V_n:
-                #     throttle_output=1.0
-                #     brake_output=0.0
-                # else:
-                #     throttle_output=0.0
-                #     brake_output=0.2
+                if np.linalg.norm(np.array([vx,vy]))<V_n:
+                    throttle_output=1.0
+                    brake_output=0.0
+                else:
+                    throttle_output=0.0
+                    brake_output=0.2
 
                 # ------Longitudanal PID control-----------
-                throttle_output,brake_output=self.PID_longitudanal(dt,V_n-vx)
+                # throttle_output,brake_output=self.PID_longitudanal(dt,V_n-vx)
 
                 # -----Checking for the Trafic light state and presence-----
                 if self._follow_Tlight:

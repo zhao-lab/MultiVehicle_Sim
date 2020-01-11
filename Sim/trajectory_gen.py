@@ -72,11 +72,12 @@ def traj_data(file_name):
     else:
         fc=1
     xl_book=pd.read_excel(file_name, header=None).values
+    # print(file_name)
     t=xl_book[:,0]
     x=(xl_book[:,1])*fc
-    y=(xl_book[:,2])*fc
+    y=-(xl_book[:,2])*fc
     vx=(xl_book[:,3])*fc
-    vy=(xl_book[:,4])*fc
+    vy=-(xl_book[:,4])*fc
 
     #  Computing the number of vehicles in the data
     p1=t[0]

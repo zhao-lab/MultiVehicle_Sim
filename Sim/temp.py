@@ -24,11 +24,12 @@ if __name__=='__main__':
             synchronous_mode=True,
             fixed_delta_seconds=1.0 / 10.0))
         spawn_points = world.get_map().get_spawn_points()
+     
         blueprint_library = world.get_blueprint_library()
         vehicle_bp = random.choice(blueprint_library.filter('vehicle.toyota.*'))
         actors = []
         print("number of spawn points: {}".format(len(spawn_points)))
-        for i in range(len(spawn_points)): #0, len(spawn_points)):
+        for i in range(len(spawn_points)): 
             actor = world.try_spawn_actor(vehicle_bp, spawn_points[i % len(spawn_points)])
             if actor==None:
                 continue

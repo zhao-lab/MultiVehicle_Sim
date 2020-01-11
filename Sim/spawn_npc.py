@@ -35,8 +35,8 @@ class spawner:
 
     def __init__(self, map1):
         # ----------NGSim1-------------------------------------------------
-        self.ROI_in=[[-1720,-1956.5],[-1657, -1928],[-1660, -1838],[-1738,-1887]]
-        self.ROI_ou=[[-1734,-1986.5],[-1631, -1927],[-1631,-1754.5],[-1785,-1870]]
+        self.ROI_in=[[59.63, -38.6],[92,-49.4],[88.4,-69.12],[49.11,-56.9]]
+        self.ROI_ou=[[59.63, 38.6],[92,49.4],[88.4,69.12],[49.11,56.9]]
 
         # --------Carla Map Town 04----------------------------
         # self.ROI_in=[[281.13,224.60],[281.13, 269.35],[232.55, 269.35],[232.55, 224.60]]
@@ -83,7 +83,6 @@ class spawner:
         waypoints=self.map.generate_waypoints(5.0)   # Generating waypoints at a resolution of 5m
     
         self.spawn_points=[]
-        waypoints=self.map.generate_waypoints(7.0)
         for i,w in enumerate(waypoints):
             x=[w.transform.location.x,-w.transform.location.y]
             # if i==0:
@@ -91,7 +90,7 @@ class spawner:
             # else:
             #     wpts=np.vstack((wpts,np.array(x).reshape(1,-1)))
 
-            if(self.inROI(x,self.ROI_ou) and not(self.inROI(x,self.ROI_in))):
+            if(self.inROI(x,self.ROI_ou)):# and not(self.inROI(x,self.ROI_in))):
                 spawn_point=w.transform
                 spawn_point.location.z=2
                 self.spawn_points.append(spawn_point)
@@ -200,10 +199,10 @@ def main():
             if(len(vehicles_list)<=0):
                 spawnNow=True
 
-            for car in vehicles_list:
-                lc=car.get_transform().location
-                if not(garage.inROI([lc.x,-lc.y],garage.ROI_ou)):
-                    car.destroy()
+            # for car in vehicles_list:
+            #     lc=car.get_transform().location
+            #     if not(garage.inROI([lc.x,-lc.y],garage.ROI_ou)):
+            #         car.destroy()
 
     finally:
 
